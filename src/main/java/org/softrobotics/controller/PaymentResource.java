@@ -19,6 +19,14 @@ public class PaymentResource {
     @Inject
     PaymentService paymentService;
 
+    /**
+     *
+     * @param request
+     * For payment this endpoint is used
+     * When payment is initiated successfully  gateway-txn-id and provider-txn-id is returned
+     * @return
+     */
+
     @POST
     @Path("/pay")
     public Response pay(PaymentDTO.PaymentRequest request) {

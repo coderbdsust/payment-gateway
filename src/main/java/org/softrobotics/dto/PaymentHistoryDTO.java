@@ -21,6 +21,7 @@ public class PaymentHistoryDTO {
         public String country;
         public String industry;
         public String source;
+        public String reference;
         public BigDecimal amount;
         public String provider;
         public LocalDateTime txnTime;

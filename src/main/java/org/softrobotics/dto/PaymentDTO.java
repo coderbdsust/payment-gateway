@@ -14,6 +14,7 @@ public class PaymentDTO {
         private String source;
         private BigDecimal amount;
         private String currency;
+        private String reference;
     }
 
     @Data
@@ -21,6 +22,7 @@ public class PaymentDTO {
     public static class ProviderResponse {
         private boolean success;
         private String status;
+        private String message;
         private String gatewayTxnId;
         private String providerTxnId;
         private String providerResponse;

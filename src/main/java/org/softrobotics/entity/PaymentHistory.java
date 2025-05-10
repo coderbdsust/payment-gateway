@@ -28,6 +28,7 @@ public class PaymentHistory  extends PanacheEntity {
     private String source;
     private BigDecimal amount;
     private String provider;
+    private String reference;
     private LocalDateTime txnTime;
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;

@@ -58,6 +58,7 @@ public class PaymentHistoryService {
                 .provider(history.getProvider())
                 .source(history.getSource())
                 .amount(history.getAmount())
+                .reference(history.getReference())
                 .txnTime(history.getTxnTime())
                 .build();
     }

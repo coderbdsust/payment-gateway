@@ -16,9 +16,9 @@ import java.math.BigDecimal;
 @Slf4j
 public class StripePaymentProvider implements PaymentProvider {
 
-
     @ConfigProperty(name = "payment.gateway.stripe.secret.key")
     String stripeSecretKey;
+
     @ConfigProperty(name = "payment.gateway.stripe.redirect.url")
     String stripeRedirectBaseURL;
 
@@ -60,6 +60,7 @@ public class StripePaymentProvider implements PaymentProvider {
                         .setPaymentIntentData(
                             SessionCreateParams.PaymentIntentData.builder()
                                     .putMetadata("payment_gateway_id", gatewayTxnId)
+                                    .putMetadata("reference", request.getReference())
                                     .build()
                         ).build();
 

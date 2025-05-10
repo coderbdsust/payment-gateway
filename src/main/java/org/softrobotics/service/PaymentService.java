@@ -67,7 +67,8 @@ public class PaymentService {
                 .providerTxnId(providerResponse.getProviderTxnId())
                 .status(providerResponse.getStatus())
                 .success(providerResponse.isSuccess())
-               .providerTxnURL(providerResponse.getProviderTxnURL())
+                .providerTxnURL(providerResponse.getProviderTxnURL())
+                .message(providerResponse.getMessage())
                 .build();
     }
 
@@ -82,6 +83,7 @@ public class PaymentService {
                 .gatewayTxnId(UUID.randomUUID().toString())
                 .txnTime(LocalDateTime.now())
                 .createdTime(LocalDateTime.now())
+                .reference(request.getReference())
                 .build();
     }
 }

@@ -3,6 +3,7 @@ package org.softrobotics.payment.provider;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 import org.softrobotics.dto.PaymentDTO;
+import org.softrobotics.payment.PaymentStatus;
 
 @ApplicationScoped
 @Slf4j
@@ -15,11 +16,11 @@ public class PaypalPaymentProvider implements PaymentProvider {
 
     @Override
     public PaymentDTO.ProviderResponse process(PaymentDTO.PaymentRequest request, String gatewayTxnId) {
-        // Need to simulate a PayPal API call
         log.debug("Processing payment via PayPal for: {}", request);
         return PaymentDTO.ProviderResponse.builder()
                 .success(false)
-                .status("Implementation Pending")
+                .status(PaymentStatus.FAILED.name())
+                .message("Implementation Pending")
                 .gatewayTxnId(gatewayTxnId)
                 .build();
     }

@@ -20,6 +20,12 @@ public class PaymentHistoryResource {
     @Inject
     PaymentHistoryService historyService;
 
+    /**
+     *
+     * @param txnId
+     * Payment history can be accessed via gatewayTxnId or providerTxnId using this endpoint
+     * @return
+     */
     @GET
     @Path("/{txnId}")
     public Response historyByTxnId(String txnId) {
@@ -34,6 +40,14 @@ public class PaymentHistoryResource {
                     .build();
         }
     }
+
+    /**
+     *
+     * @param pageNo
+     * @param rowSize
+     * All the payment history is accessible using this endpoint using pagination params
+     * @return
+     */
 
     @GET
     public Response historyByPage(@QueryParam("pageNo") int pageNo, @QueryParam("rowSize") int rowSize) {

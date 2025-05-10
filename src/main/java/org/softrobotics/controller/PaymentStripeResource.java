@@ -20,6 +20,12 @@ public class PaymentStripeResource {
     @Inject
     StripeService stripeService;
 
+    /**
+     *
+     * @param txnId
+     * Payment is done successfully via stripe UI, it's send the confirmation in this callback URL
+     * @return
+     */
     @GET
     @Path("/stripe/success")
     public Response success(@QueryParam("gatewayTxnId") String txnId) {
@@ -35,6 +41,12 @@ public class PaymentStripeResource {
         }
     }
 
+    /**
+     *
+     * @param txnId
+     * Payment is cancelled via stripe UI, it's send the confirmation in this callback URL
+     * @return
+     */
     @GET
     @Path("/stripe/cancel")
     public Response cancel(@QueryParam("gatewayTxnId") String txnId) {
