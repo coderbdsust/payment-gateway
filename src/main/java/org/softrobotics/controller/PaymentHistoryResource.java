@@ -29,7 +29,7 @@ public class PaymentHistoryResource {
     @GET
     @Path("/{txnId}")
     public Response historyByTxnId(String txnId) {
-        log.debug("/payment/history/ : {}", txnId);
+        log.info("/payment/history/ : {}", txnId);
         try {
             PaymentHistoryDTO.HistoryResponse res = historyService.getPaymentHistoryByTxnId(txnId);
             return Response.ok(res).build();
@@ -51,7 +51,7 @@ public class PaymentHistoryResource {
 
     @GET
     public Response historyByPage(@QueryParam("pageNo") int pageNo, @QueryParam("rowSize") int rowSize) {
-        log.debug("/payment/history/ : pageNo {}, rowSize {}  ", pageNo, rowSize);
+        log.info("/payment/history/ : pageNo {}, rowSize {}  ", pageNo, rowSize);
 
         try {
             PageResponse<PaymentHistoryDTO.HistoryResponse> pageResponse= historyService.getPaymentHistoryByPage(pageNo, rowSize);

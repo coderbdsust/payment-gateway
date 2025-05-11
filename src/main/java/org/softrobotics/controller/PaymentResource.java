@@ -31,7 +31,7 @@ public class PaymentResource {
     @POST
     @Path("/pay")
     public Response pay(@Valid PaymentDTO.PaymentRequest request) {
-        log.debug("/payment/pay : {}", request);
+        log.info("/payment/pay : {}", request);
         try {
             PaymentDTO.PaymentResponse response = paymentService.pay(request);
             return Response.ok(response).build();

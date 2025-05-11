@@ -27,7 +27,7 @@ public class PaypalPaymentProvider implements PaymentProvider {
 
     @Override
     public PaymentDTO.ProviderResponse process(PaymentDTO.PaymentRequest request, String gatewayTxnId) {
-        log.debug("Processing payment via PayPal for: {}", request);
+        log.info("Processing payment via PayPal for: {}", request);
         return PaymentDTO.ProviderResponse.builder()
                 .success(false)
                 .status(PaymentStatus.FAILED.name())

@@ -29,7 +29,7 @@ public class PaymentStripeResource {
     @GET
     @Path("/stripe/success")
     public Response success(@QueryParam("gatewayTxnId") String txnId) {
-        log.debug("/payment/success : {}", txnId);
+        log.info("/payment/success : {}", txnId);
         try {
             PaymentDTO.PaymentResponse response = stripeService.success(txnId);
             return Response.ok(response).build();
@@ -50,7 +50,7 @@ public class PaymentStripeResource {
     @GET
     @Path("/stripe/cancel")
     public Response cancel(@QueryParam("gatewayTxnId") String txnId) {
-        log.debug("/payment/cancel : {}", txnId);
+        log.info("/payment/cancel : {}", txnId);
         try {
             PaymentDTO.PaymentResponse response = stripeService.cancel(txnId);
             return Response.ok(response).build();

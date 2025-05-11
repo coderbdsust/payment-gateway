@@ -40,7 +40,7 @@ public class StripePaymentProvider implements PaymentProvider {
 
     @Override
     public PaymentDTO.ProviderResponse process(PaymentDTO.PaymentRequest request, String gatewayTxnId) {
-        log.debug("Processing payment via Stripe for: {}", request);
+        log.info("Processing payment via Stripe for: {}", request);
 
         Stripe.apiKey = stripeSecretKey;
 

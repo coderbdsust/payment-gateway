@@ -33,14 +33,14 @@ public class PaymentService {
 
     @Transactional
     public PaymentDTO.PaymentResponse pay(PaymentDTO.PaymentRequest request) {
-        log.debug("Processing request {}", request);
+        log.info("Processing request {}", request);
         PaymentHistory history = paymentMapper.paymentRequestToPaymentHistory(request);
         PaymentProvider provider = selector.selectProvider(request);
 
         if(provider==null) {
             history.setProvider(PaymentType.Unknown.name());
             historyRepo.persist(history);
-            log.debug("No provider found for this request {}", request);
+            log.info("No provider found for this request {}", request);
             throw new ProviderNotFoundException("No provider found for transaction for this request");
         }
 
@@ -51,14 +51,14 @@ public class PaymentService {
             history.setProvider(PaymentType.Stripe.name());
 
         PaymentDTO.ProviderResponse response = provider.process(request, history.getGatewayTxnId());
-        log.debug("Provider response {}", response);
+        log.info("Provider response {}", response);
         history.setGatewayStatus(response.isSuccess() ? PaymentStatus.PAYMENT_INITIATED.name() : PaymentStatus.FAILED.name());
         history.setProviderTxnId( response.getProviderTxnId());
         history.setProviderStatus(response.getStatus());
         history.setProviderResponse(response.getProviderResponse());
         history.setUpdatedTime(LocalDateTime.now());
         historyRepo.persist(history);
-        log.debug("History updated for  Id {} ",history.id);
+        log.info("History updated for  Id {} ",history.id);
         return paymentMapper.providerResponseToPaymentResponse(response);
     }
 
