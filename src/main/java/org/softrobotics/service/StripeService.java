@@ -2,7 +2,6 @@ package org.softrobotics.service;
 
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
-import com.stripe.model.PaymentIntent;
 import com.stripe.model.checkout.Session;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -24,6 +23,16 @@ public class StripeService {
     @ConfigProperty(name = "payment.gateway.stripe.secret.key")
     String stripeSecretKey;
 
+    /**
+     *
+     * @param txnId
+     * @return Payment is done using stripe transaction URL,
+     * After payment it's confirm in this call back URL and
+     * Using gateway txn id it retrieve the session and
+     * payment history update the payment id and transaction status
+     * @throws StripeException
+     */
+
     @Transactional
     public PaymentDTO.PaymentResponse success(String txnId) throws StripeException {
        PaymentHistory paymentHistory =  paymentHistoryRepo.findByGatewayTxnIdOrProviderTxnId(txnId);
@@ -44,6 +53,7 @@ public class StripeService {
             String paymentId = retrieve.getPaymentIntent();
             paymentHistory.setProviderTxnId(paymentId);
             paymentHistory.setGatewayStatus(PaymentStatus.SUCCESS.name());
+            paymentHistory.setProviderStatus(retrieve.getStatus());
             paymentHistoryRepo.persist(paymentHistory);
             return PaymentDTO.PaymentResponse.builder()
                     .success(true)
@@ -61,8 +71,6 @@ public class StripeService {
                     .providerTxnId(paymentHistory.getProviderTxnId())
                     .build();
         }
-
-
     }
 
     @Transactional
@@ -73,7 +81,7 @@ public class StripeService {
         return PaymentDTO.PaymentResponse.builder()
                 .success(false)
                 .status(PaymentStatus.CANCELED.name())
-                .message("Payment failed")
+                .message("Payment Canceled")
                 .gatewayTxnId(txnId)
                 .build();
     }

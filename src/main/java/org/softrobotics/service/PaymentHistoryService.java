@@ -1,10 +1,7 @@
 package org.softrobotics.service;
 
-
-import com.stripe.model.InvoicePayment;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.persistence.Column;
 import lombok.extern.slf4j.Slf4j;
 import org.softrobotics.dto.PageResponse;
 import org.softrobotics.dto.PaymentHistoryDTO;

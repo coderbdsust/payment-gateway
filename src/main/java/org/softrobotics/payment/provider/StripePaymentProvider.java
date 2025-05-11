@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.softrobotics.dto.PaymentDTO;
 import org.softrobotics.payment.PaymentStatus;
+import org.softrobotics.payment.PaymentType;
 
 import java.math.BigDecimal;
 
@@ -23,8 +24,18 @@ public class StripePaymentProvider implements PaymentProvider {
     String stripeRedirectBaseURL;
 
     @Override
-    public boolean supports(PaymentDTO.PaymentRequest request) {
-        return "US".equalsIgnoreCase(request.getCountry()) || "stripe".equalsIgnoreCase(request.getSource());
+    public boolean supportPaymentSource(PaymentDTO.PaymentRequest request) {
+        return PaymentType.Stripe.name().equalsIgnoreCase(request.getPaymentSource());
+    }
+
+    @Override
+    public boolean supportCountry(PaymentDTO.PaymentRequest request) {
+        return "US".equalsIgnoreCase(request.getCountry()) ;
+    }
+
+    @Override
+    public boolean supportIndustry(PaymentDTO.PaymentRequest request) {
+        return false;
     }
 
     @Override
@@ -67,6 +78,7 @@ public class StripePaymentProvider implements PaymentProvider {
         try {
             Session session = Session.create(params);
             log.info("Stripe session created: {}", session.getId());
+            log.info("Client ref id: {}",session.getClientReferenceId());
 
             return PaymentDTO.ProviderResponse.builder()
                     .success(true)
@@ -82,6 +94,7 @@ public class StripePaymentProvider implements PaymentProvider {
             return PaymentDTO.ProviderResponse.builder()
                     .success(false)
                     .status(PaymentStatus.ERROR.name())
+                    .message(e.getMessage())
                     .gatewayTxnId(gatewayTxnId)
                     .providerResponse(e.getMessage())
                     .build();

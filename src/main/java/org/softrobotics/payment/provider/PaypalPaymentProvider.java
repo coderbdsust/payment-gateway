@@ -4,14 +4,25 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 import org.softrobotics.dto.PaymentDTO;
 import org.softrobotics.payment.PaymentStatus;
+import org.softrobotics.payment.PaymentType;
 
 @ApplicationScoped
 @Slf4j
 public class PaypalPaymentProvider implements PaymentProvider {
 
     @Override
-    public boolean supports(PaymentDTO.PaymentRequest request) {
-        return "paypal".equalsIgnoreCase(request.getSource()) || "EU".equalsIgnoreCase(request.getCountry()) ;
+    public boolean supportPaymentSource(PaymentDTO.PaymentRequest request) {
+        return PaymentType.Paypal.name().equalsIgnoreCase(request.getPaymentSource());
+    }
+
+    @Override
+    public boolean supportCountry(PaymentDTO.PaymentRequest request) {
+        return "EU".equalsIgnoreCase(request.getCountry()) ;
+    }
+
+    @Override
+    public boolean supportIndustry(PaymentDTO.PaymentRequest request) {
+        return false;
     }
 
     @Override
@@ -20,7 +31,7 @@ public class PaypalPaymentProvider implements PaymentProvider {
         return PaymentDTO.ProviderResponse.builder()
                 .success(false)
                 .status(PaymentStatus.FAILED.name())
-                .message("Implementation Pending")
+                .message("Implementation Pending for Paypal")
                 .gatewayTxnId(gatewayTxnId)
                 .build();
     }

@@ -1,6 +1,7 @@
 package org.softrobotics.controller;
 
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -29,7 +30,7 @@ public class PaymentResource {
 
     @POST
     @Path("/pay")
-    public Response pay(PaymentDTO.PaymentRequest request) {
+    public Response pay(@Valid PaymentDTO.PaymentRequest request) {
         log.debug("/payment/pay : {}", request);
         try {
             PaymentDTO.PaymentResponse response = paymentService.pay(request);

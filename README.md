@@ -26,8 +26,8 @@ Method : POST
 
 Request:
 {
-    "source":"stripe" //Optional
-    "industry":"Softrobotics",
+    "paymentSource":"stripe" // Optional Paypal or Stripe
+    "industry":"Softrobotics", // Optional
     "country":"US",
     "currency":"USD",
     "amount":23
@@ -84,19 +84,20 @@ URL : localhost:9090/api/v1/payment/history/{txnId}
 Method : GET
 
 Response
-    {
-        "gatewayStatus": "SUCCESS",
-        "providerStatus": "requires_payment_method",
-        "gatewayTxnId": "a19dc325-3697-49be-a5c1-2d0df842c452",
-        "providerTxnId": "pi_3RN9kkDBMFDZeCIr0RkFHDqd",
-        "currency": "USD",
-        "country": "US",
-        "industry": null,
-        "source": null,
-        "amount": 4.00,
-        "provider": "Stripe",
-        "txnTime": "2025-05-10T15:31:29.532419"
-    }
+{
+    "gatewayStatus": "SUCCESS",
+    "providerStatus": "open",
+    "gatewayTxnId": "a987e401-bb53-4df2-88d4-04f42021b5eb",
+    "providerTxnId": "pi_3RNRR1DBMFDZeCIr058WGYh7",
+    "currency": "EUR",
+    "country": "EU",
+    "industry": "Softrobotics",
+    "source": "Stripe",
+    "reference": "For testing",
+    "amount": 2.00,
+    "provider": "Stripe",
+    "txnTime": "2025-05-11T10:19:16.345072"
+}
 
 ```
 

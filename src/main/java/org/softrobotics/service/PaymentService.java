@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.softrobotics.dto.PaymentDTO;
 import org.softrobotics.entity.PaymentHistory;
+import org.softrobotics.mapper.PaymentMapper;
 import org.softrobotics.payment.PaymentStatus;
 import org.softrobotics.payment.PaymentType;
 import org.softrobotics.payment.provider.PaymentProvider;
@@ -16,7 +17,6 @@ import org.softrobotics.payment.provider.StripePaymentProvider;
 import org.softrobotics.repository.PaymentHistoryRepository;
 import java.nio.file.ProviderNotFoundException;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @ApplicationScoped
 @Slf4j
@@ -28,14 +28,17 @@ public class PaymentService {
     @Inject
     PaymentHistoryRepository historyRepo;
 
+    @Inject
+    PaymentMapper paymentMapper;
+
     @Transactional
     public PaymentDTO.PaymentResponse pay(PaymentDTO.PaymentRequest request) {
         log.debug("Processing request {}", request);
-        PaymentHistory history = requestToHistory(request);
+        PaymentHistory history = paymentMapper.paymentRequestToPaymentHistory(request);
         PaymentProvider provider = selector.selectProvider(request);
 
         if(provider==null) {
-            history.setProvider("Unknown");
+            history.setProvider(PaymentType.Unknown.name());
             historyRepo.persist(history);
             log.debug("No provider found for this request {}", request);
             throw new ProviderNotFoundException("No provider found for transaction for this request");
@@ -54,36 +57,10 @@ public class PaymentService {
         history.setProviderStatus(response.getStatus());
         history.setProviderResponse(response.getProviderResponse());
         history.setUpdatedTime(LocalDateTime.now());
-
         historyRepo.persist(history);
         log.debug("History updated for  Id {} ",history.id);
-        return toPaymentResponse(response);
+        return paymentMapper.providerResponseToPaymentResponse(response);
     }
 
-    private PaymentDTO.PaymentResponse toPaymentResponse(PaymentDTO.ProviderResponse providerResponse){
 
-       return PaymentDTO.PaymentResponse.builder()
-                .gatewayTxnId(providerResponse.getGatewayTxnId())
-                .providerTxnId(providerResponse.getProviderTxnId())
-                .status(providerResponse.getStatus())
-                .success(providerResponse.isSuccess())
-                .providerTxnURL(providerResponse.getProviderTxnURL())
-                .message(providerResponse.getMessage())
-                .build();
-    }
-
-    private PaymentHistory requestToHistory(PaymentDTO.PaymentRequest request){
-        return PaymentHistory.builder()
-                .gatewayStatus(PaymentStatus.INITIATED.name())
-                .currency(request.getCurrency())
-                .amount(request.getAmount())
-                .country(request.getCountry())
-                .industry(request.getIndustry())
-                .source(request.getSource())
-                .gatewayTxnId(UUID.randomUUID().toString())
-                .txnTime(LocalDateTime.now())
-                .createdTime(LocalDateTime.now())
-                .reference(request.getReference())
-                .build();
-    }
 }
