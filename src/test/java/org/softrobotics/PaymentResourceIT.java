@@ -3,6 +3,6 @@ package org.softrobotics;
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 
 @QuarkusIntegrationTest
-class GreetingResourceIT extends GreetingResourceTest {
+class PaymentResourceIT extends PaymentResourceTest {
     // Execute the same tests but in packaged mode.
 }

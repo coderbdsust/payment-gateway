@@ -20,6 +20,9 @@ public class PaymentHistoryService {
 
     public PaymentHistoryResponse getPaymentHistoryByTxnId(String txnId){
         PaymentHistory history = paymentHistoryRepo.findByGatewayTxnIdOrProviderTxnId(txnId);
+        if(history==null){
+            throw new PaymentHistoryNotFoundException("Payment history not found using this txn id "+txnId);
+        }
         return toPaymentHistoryToHistoryResponse(history);
     }
 
