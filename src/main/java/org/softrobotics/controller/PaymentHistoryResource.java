@@ -5,8 +5,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import lombok.extern.slf4j.Slf4j;
+import org.softrobotics.dto.PaymentHistoryResponse;
 import org.softrobotics.dto.PageResponse;
-import org.softrobotics.dto.PaymentHistoryDTO;
 import org.softrobotics.service.PaymentHistoryService;
 
 import java.util.Map;
@@ -31,7 +31,7 @@ public class PaymentHistoryResource {
     public Response historyByTxnId(String txnId) {
         log.info("/payment/history/ : {}", txnId);
         try {
-            PaymentHistoryDTO.HistoryResponse res = historyService.getPaymentHistoryByTxnId(txnId);
+            PaymentHistoryResponse res = historyService.getPaymentHistoryByTxnId(txnId);
             return Response.ok(res).build();
         } catch (Exception e) {
             log.error("",e);
@@ -54,7 +54,7 @@ public class PaymentHistoryResource {
         log.info("/payment/history/ : pageNo {}, rowSize {}  ", pageNo, rowSize);
 
         try {
-            PageResponse<PaymentHistoryDTO.HistoryResponse> pageResponse= historyService.getPaymentHistoryByPage(pageNo, rowSize);
+            PageResponse<PaymentHistoryResponse> pageResponse= historyService.getPaymentHistoryByPage(pageNo, rowSize);
             return Response.ok(pageResponse).build();
         } catch (Exception e) {
             log.error("",e);

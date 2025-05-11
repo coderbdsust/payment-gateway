@@ -3,6 +3,7 @@ package org.softrobotics.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.softrobotics.dto.PaymentDTO;
@@ -17,6 +18,9 @@ import org.softrobotics.payment.provider.StripePaymentProvider;
 import org.softrobotics.repository.PaymentHistoryRepository;
 import java.nio.file.ProviderNotFoundException;
 import java.time.LocalDateTime;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutorService;
 
 @ApplicationScoped
 @Slf4j
@@ -30,6 +34,9 @@ public class PaymentService {
 
     @Inject
     PaymentMapper paymentMapper;
+
+    @Inject
+    ExecutorService executor;
 
     @Transactional
     public PaymentDTO.PaymentResponse pay(PaymentDTO.PaymentRequest request) {
@@ -60,6 +67,10 @@ public class PaymentService {
         historyRepo.persist(history);
         log.info("History updated for  Id {} ",history.id);
         return paymentMapper.providerResponseToPaymentResponse(response);
+    }
+
+    public CompletionStage<PaymentDTO.PaymentResponse> payAsync(PaymentDTO.PaymentRequest request) {
+        return CompletableFuture.supplyAsync(() -> pay(request), executor);
     }
 
 

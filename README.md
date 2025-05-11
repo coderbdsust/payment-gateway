@@ -20,14 +20,19 @@ export PG_STRIPE_REDIRECT_URL=<server-base-url>
 ## Gateway APIs
 
 ```declarative
+http://localhost:9090/api/v1/q/swagger-ui/
+```
+
+```declarative
 URL: localhost:9090/api/v1/payment/pay
+URL: localhost:9090/api/v1/payment/async/pay
 
 Method : POST
 
 Request:
 {
     "paymentSource":"stripe" // Optional Paypal or Stripe
-    "industry":"Softrobotics", // Optional
+    "industry":"Softrobotics",
     "country":"US",
     "currency":"USD",
     "amount":23

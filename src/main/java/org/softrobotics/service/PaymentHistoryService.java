@@ -3,8 +3,8 @@ package org.softrobotics.service;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
+import org.softrobotics.dto.PaymentHistoryResponse;
 import org.softrobotics.dto.PageResponse;
-import org.softrobotics.dto.PaymentHistoryDTO;
 import org.softrobotics.entity.PaymentHistory;
 import org.softrobotics.repository.PaymentHistoryRepository;
 
@@ -18,25 +18,25 @@ public class PaymentHistoryService {
     @Inject
     private PaymentHistoryRepository paymentHistoryRepo;
 
-    public PaymentHistoryDTO.HistoryResponse getPaymentHistoryByTxnId(String txnId){
+    public PaymentHistoryResponse getPaymentHistoryByTxnId(String txnId){
         PaymentHistory history = paymentHistoryRepo.findByGatewayTxnIdOrProviderTxnId(txnId);
         return toPaymentHistoryToHistoryResponse(history);
     }
 
-    public PageResponse<PaymentHistoryDTO.HistoryResponse> getPaymentHistoryByPage(int pageNo, int pageSize) {
+    public PageResponse<PaymentHistoryResponse> getPaymentHistoryByPage(int pageNo, int pageSize) {
 
         if(pageNo<=0) pageNo=1;
 
         List<PaymentHistory> txnList = paymentHistoryRepo.findPaymentHistoryByPage(pageNo-1, pageSize);
         long totalCount = paymentHistoryRepo.count();
 
-        List<PaymentHistoryDTO.HistoryResponse> content = txnList.stream()
+        List<PaymentHistoryResponse> content = txnList.stream()
                 .map(this::toPaymentHistoryToHistoryResponse)
                 .collect(Collectors.toList());
 
         int totalPage = (int) Math.ceil((double) totalCount / pageSize);
 
-        return PageResponse.<PaymentHistoryDTO.HistoryResponse>builder()
+        return PageResponse.<PaymentHistoryResponse>builder()
                 .content(content)
                 .pageNo(pageNo)
                 .pageSize(pageSize)
@@ -46,8 +46,8 @@ public class PaymentHistoryService {
     }
 
 
-    private PaymentHistoryDTO.HistoryResponse toPaymentHistoryToHistoryResponse(PaymentHistory history){
-        return PaymentHistoryDTO.HistoryResponse.builder()
+    private PaymentHistoryResponse toPaymentHistoryToHistoryResponse(PaymentHistory history){
+        return PaymentHistoryResponse.builder()
                 .gatewayTxnId(history.getGatewayTxnId())
                 .currency(history.getCurrency())
                 .country(history.getCountry())

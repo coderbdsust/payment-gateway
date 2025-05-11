@@ -12,7 +12,9 @@ public class PaymentDTO {
 
     @Data
     public static class PaymentRequest {
+        @NotNull(message = "Country is required")
         private String country;
+        @NotNull(message = "Industry is required")
         private String industry;
         private String paymentSource;
         @NotNull(message = "Amount is required")

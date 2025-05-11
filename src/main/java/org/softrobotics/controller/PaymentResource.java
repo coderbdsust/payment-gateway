@@ -10,6 +10,7 @@ import org.softrobotics.dto.PaymentDTO;
 import org.softrobotics.service.PaymentService;
 
 import java.util.Map;
+import java.util.concurrent.CompletionStage;
 
 @Path("/payment")
 @Produces(MediaType.APPLICATION_JSON)
@@ -42,4 +43,25 @@ public class PaymentResource {
                     .build();
         }
     }
+
+    /**
+     *
+     * @param request
+     * Payment is done in async way using this endpoint
+     * @return
+     */
+    @POST
+    @Path("/async/pay")
+    public CompletionStage<Response> payAsync(@Valid PaymentDTO.PaymentRequest request) {
+        log.info("/payment/async/pay : {}", request);
+        return paymentService.payAsync(request)
+                .thenApply(response -> Response.ok(response).build())
+                .exceptionally(e -> {
+                    log.error("Payment failed", e);
+                    return Response.status(Response.Status.BAD_REQUEST)
+                            .entity(Map.of("error", e.getMessage()))
+                            .build();
+                });
+    }
+
 }
