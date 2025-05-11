@@ -50,7 +50,7 @@ public class PaymentHistoryResource {
      */
 
     @GET
-    public Response historyByPage(@QueryParam("pageNo") int pageNo, @QueryParam("rowSize") int rowSize) {
+    public Response historyByPage(@DefaultValue("1") @QueryParam("pageNo") int pageNo,@DefaultValue("10")   @QueryParam("rowSize") int rowSize) {
         log.info("/payment/history/ : pageNo {}, rowSize {}  ", pageNo, rowSize);
 
         try {

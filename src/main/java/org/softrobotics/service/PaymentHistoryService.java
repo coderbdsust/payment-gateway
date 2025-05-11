@@ -24,7 +24,10 @@ public class PaymentHistoryService {
     }
 
     public PageResponse<PaymentHistoryDTO.HistoryResponse> getPaymentHistoryByPage(int pageNo, int pageSize) {
-        List<PaymentHistory> txnList = paymentHistoryRepo.findPaymentHistoryByPage(pageNo, pageSize);
+
+        if(pageNo<=0) pageNo=1;
+
+        List<PaymentHistory> txnList = paymentHistoryRepo.findPaymentHistoryByPage(pageNo-1, pageSize);
         long totalCount = paymentHistoryRepo.count();
 
         List<PaymentHistoryDTO.HistoryResponse> content = txnList.stream()
