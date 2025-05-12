@@ -29,12 +29,12 @@ public class PaymentProviderSelector {
             return paymentProviderInstances.stream()
                     .filter(p -> p.supportPaymentSource(request))
                     .findFirst()
-                    .orElseThrow(() -> new IllegalArgumentException("Payment Source Not Valid"));
+                    .orElse(null);
         }
 
         return paymentProviderInstances.stream()
                 .filter(p -> p.supportCountry(request) || p.supportIndustry(request))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No provider found"));
+                .orElse(null);
     }
 }

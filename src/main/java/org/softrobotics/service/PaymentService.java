@@ -46,9 +46,15 @@ public class PaymentService {
 
         if(provider==null) {
             history.setProvider(PaymentType.Unknown.name());
+            history.setGatewayStatus(PaymentStatus.FAILED.name());
             historyRepo.persist(history);
             log.info("No provider found for this request {}", request);
-            throw new ProviderNotFoundException("No provider found for transaction for this request");
+            return PaymentDTO.PaymentResponse.builder()
+                    .success(false)
+                    .status(PaymentStatus.FAILED.name())
+                    .gatewayTxnId(history.getGatewayTxnId())
+                    .message("Provider not found")
+                    .build();
         }
 
         if(provider instanceof PaypalPaymentProvider)
